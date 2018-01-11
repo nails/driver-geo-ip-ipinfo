@@ -2,7 +2,7 @@
 
 namespace Nails\GeoIp\Driver;
 
-class NailsTest extends \PHPUnit_Framework_TestCase
+class IpInfoTest extends \PHPUnit_Framework_TestCase
 {
     public function testFoo()
     {

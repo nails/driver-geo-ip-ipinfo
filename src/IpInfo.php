@@ -16,10 +16,10 @@ class IpInfo implements Driver
     // --------------------------------------------------------------------------
 
     /**
-     * The value of a OK response
+     * The value of an OK response
      * @var integer
      */
-    const IPINFO_STATUS_OK = 200;
+    const STATUS_OK = 200;
 
     // --------------------------------------------------------------------------
 
@@ -42,7 +42,8 @@ class IpInfo implements Driver
     // --------------------------------------------------------------------------
 
     /**
-     * @param string $sIp  The IP address to look up
+     * @param string $sIp The IP address to look up
+     *
      * @return \Nails\GeoIp\Result\Ip
      */
     public function lookup($sIp)
@@ -59,12 +60,12 @@ class IpInfo implements Driver
                 static::BASE_URL . '/' . $sIp . '/json',
                 [
                     'query' => [
-                        'token' => $this->sAccessToken
-                    ]
+                        'token' => $this->sAccessToken,
+                    ],
                 ]
             );
 
-            if ($oResponse->getStatusCode() === static::IPINFO_STATUS_OK) {
+            if ($oResponse->getStatusCode() === static::STATUS_OK) {
 
                 $oJson = json_decode($oResponse->getBody());
 
