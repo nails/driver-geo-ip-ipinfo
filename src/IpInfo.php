@@ -2,10 +2,12 @@
 
 namespace Nails\GeoIp\Driver;
 
+use Nails\Common\Driver\Base;
 use Nails\Factory;
+use Nails\GeoIp\Exception\GeoIpDriverException;
 use Nails\GeoIp\Interfaces\Driver;
 
-class IpInfo implements Driver
+class IpInfo extends Base implements Driver
 {
     /**
      * The base url of the ipinfo.io service.
@@ -24,20 +26,18 @@ class IpInfo implements Driver
     // --------------------------------------------------------------------------
 
     /**
-     * The access token for the ipinfo.io service
-     * @var string
+     * The value of a Rate Limited response
+     * @var integer
      */
-    private $sAccessToken;
+    const STATUS_RATE_LIMIT_EXCEEDED = 429;
 
     // --------------------------------------------------------------------------
 
     /**
-     * Construct the driver
+     * The access token for the ipinfo.io service
+     * @var string
      */
-    public function __construct()
-    {
-        $this->sAccessToken = defined('APP_GEO_IP_ACCESS_TOKEN') ? APP_GEO_IP_ACCESS_TOKEN : '';
-    }
+    protected $sAccessToken;
 
     // --------------------------------------------------------------------------
 
@@ -48,26 +48,55 @@ class IpInfo implements Driver
      */
     public function lookup($sIp)
     {
-        $oIp     = Factory::factory('Ip', 'nailsapp/module-geo-ip');
-        $oClient = Factory::factory('HttpClient');
+        $sIp         = '77.97.192.230';
+        $oHttpClient = Factory::factory('HttpClient');
+        $oIp         = Factory::factory('Ip', 'nailsapp/module-geo-ip');
 
         $oIp->setIp($sIp);
 
         try {
 
-            $oResponse = $oClient->request(
-                'GET',
-                static::BASE_URL . '/' . $sIp . '/json',
-                [
-                    'query' => [
-                        'token' => $this->sAccessToken,
-                    ],
-                ]
-            );
+            if (empty($this->sAccessToken)) {
+                throw new GeoIpDriverException('An ipinfo.io Access Token must be provided.');
+            }
 
-            if ($oResponse->getStatusCode() === static::STATUS_OK) {
+            try {
 
-                $oJson = json_decode($oResponse->getBody());
+                $oResponse = $oHttpClient->request(
+                    'GET',
+                    static::BASE_URL . '/' . $sIp . '/json',
+                    [
+                        'query' => [
+                            'token' => $this->sAccessToken,
+                        ],
+                    ]
+                );
+
+            } catch (\GuzzleHttp\Exception\ClientException $e) {
+                $oJson = json_decode($e->getResponse()->getBody());
+                if (!empty($oJson->error->message)) {
+                    throw new GeoIpDriverException(
+                        $oJson->error->message,
+                        $e->getCode()
+                    );
+                } else {
+                    throw new GeoIpDriverException(
+                        $e->getMessage(),
+                        $e->getCode()
+                    );
+                }
+            }
+
+            $oJson = json_decode($oResponse->getBody());
+
+            if ($oResponse->getStatusCode() === static::STATUS_RATE_LIMIT_EXCEEDED) {
+
+                throw new GeoIpDriverException(
+                    'Rate limit exceeded',
+                    static::STATUS_RATE_LIMIT_EXCEEDED
+                );
+
+            } elseif ($oResponse->getStatusCode() === static::STATUS_OK) {
 
                 if (!empty($oJson->hostname)) {
                     $oIp->setHostname($oJson->hostname);
@@ -99,8 +128,9 @@ class IpInfo implements Driver
                 }
             }
 
-        } catch (\Exception $e) {
-            //  @log the exception somewhere
+        } catch (GeoIpDriverException $e) {
+            $oIp->setError($e->getMessage());
+            trigger_error($e->getMessage(), E_USER_WARNING);
         }
 
         return $oIp;
