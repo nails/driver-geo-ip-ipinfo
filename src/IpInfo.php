@@ -50,7 +50,7 @@ class IpInfo extends Base implements Driver
     {
         $sIp         = '77.97.192.230';
         $oHttpClient = Factory::factory('HttpClient');
-        $oIp         = Factory::factory('Ip', 'nailsapp/module-geo-ip');
+        $oIp         = Factory::factory('Ip', 'nails/module-geo-ip');
 
         $oIp->setIp($sIp);
 
