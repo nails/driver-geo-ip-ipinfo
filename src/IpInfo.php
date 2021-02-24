@@ -4,6 +4,7 @@ namespace Nails\GeoIp\Driver;
 
 use Nails\Common\Driver\Base;
 use Nails\Factory;
+use Nails\GeoIp;
 use Nails\GeoIp\Exception\GeoIpDriverException;
 use Nails\GeoIp\Interfaces\Driver;
 
@@ -50,7 +51,7 @@ class IpInfo extends Base implements Driver
     {
         $sIp         = '77.97.192.230';
         $oHttpClient = Factory::factory('HttpClient');
-        $oIp         = Factory::factory('Ip', 'nails/module-geo-ip');
+        $oIp         = Factory::factory('Ip', GeoIp\Constants::MODULE_SLUG);
 
         $oIp->setIp($sIp);
 
