@@ -1,6 +1,6 @@
 <?php
 
-namespace Nails\GeoIp\Driver\Settings;
+namespace Nails\GeoIp\Driver\IpInfo\Settings;
 
 use Nails\Common\Helper\Form;
 use Nails\Common\Interfaces;
@@ -11,7 +11,7 @@ use Nails\Factory;
 /**
  * Class IpInfo
  *
- * @package Nails\GeoIp\Driver\Settings
+ * @package Nails\GeoIp\Driver\IpInfo\Settings
  */
 class IpInfo implements Interfaces\Component\Settings
 {
