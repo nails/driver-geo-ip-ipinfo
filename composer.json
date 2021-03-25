@@ -34,17 +34,10 @@
             "name": "IP Info",
             "type": "driver",
             "forModule": "nails/module-geo-ip",
+            "namespace": "Nails\\GeoIp\\Driver\\",
             "data": {
                 "namespace": "Nails\\GeoIp\\Driver\\",
-                "class": "IpInfo",
-                "settings": [
-                    {
-                        "key": "sAccessToken",
-                        "label": "Access Token",
-                        "type": "password",
-                        "encrypted": true
-                    }
-                ]
+                "class": "IpInfo"
             }
         }
     },
