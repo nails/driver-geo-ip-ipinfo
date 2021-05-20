@@ -7,6 +7,7 @@ use Nails\Factory;
 use Nails\GeoIp;
 use Nails\GeoIp\Exception\GeoIpDriverException;
 use Nails\GeoIp\Interfaces\Driver;
+use Nails\GeoIp\Result;
 
 class IpInfo extends Base implements Driver
 {
@@ -45,11 +46,10 @@ class IpInfo extends Base implements Driver
     /**
      * @param string $sIp The IP address to look up
      *
-     * @return \Nails\GeoIp\Result\Ip
+     * @return Result\Ip
      */
-    public function lookup($sIp)
+    public function lookup(string $sIp): Result\Ip
     {
-        $sIp         = '77.97.192.230';
         $oHttpClient = Factory::factory('HttpClient');
         $oIp         = Factory::factory('Ip', GeoIp\Constants::MODULE_SLUG);
 
