@@ -112,7 +112,7 @@ class IpInfo extends Base implements Driver
                 }
 
                 if (!empty($oJson->country)) {
-                    $oIp->setCountry($oJson->country);
+                    $oIp->setCountryCode($oJson->country);
                 }
 
                 if (!empty($oJson->loc)) {
