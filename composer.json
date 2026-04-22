@@ -1,7 +1,6 @@
 {
     "name": "nails/driver-geo-ip-ipinfo",
-    "keywords":
-    [
+    "keywords": [
         "Nails",
         "Shed Collective",
         "CodeIgniter",
@@ -12,8 +11,7 @@
     "homepage": "http://nailsapp.co.uk/modules/geo-ip/driver/ipinfo",
     "description": "This is the \"IP Info\" driver for the Nails GeoIP module.",
     "license": "MIT",
-    "authors":
-    [
+    "authors": [
         {
             "name": "Pablo de la Pena",
             "email": "p@nailsapp.co.uk",
@@ -21,44 +19,36 @@
             "role": "Developer"
         }
     ],
-    "support":
-    {
+    "support": {
         "email": "hello@nailsapp.co.uk"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "require":
-    {
+    "require": {
+        "php": ">=8.3",
         "nails/module-geo-ip": "dev-feature/pre-new-admin"
     },
-    "require-dev":
-    {
-        "phpunit/phpunit": "9.*",
-        "phpstan/phpstan": "1.*"
+    "require-dev": {
+        "phpunit/phpunit": "^12.0",
+        "phpstan/phpstan": "^2.0"
     },
-    "scripts":
-    {
+    "scripts": {
         "test": "./vendor/bin/phpunit",
         "analyse": "./vendor/bin/phpstan analyse -c .phpstan/config.neon"
     },
-    "autoload":
-    {
-        "psr-4":
-        {
+    "autoload": {
+        "psr-4": {
             "Nails\\GeoIp\\Driver\\": "src/",
             "Nails\\GeoIp\\Driver\\IpInfo\\": "src/IpInfo/"
         }
     },
-    "extra":
-    {
-        "nails":
-        {
+    "extra": {
+        "nails": {
             "name": "IP Info",
             "type": "driver",
             "forModule": "nails/module-geo-ip",
             "namespace": "Nails\\GeoIp\\Driver\\IpInfo\\",
-            "data":
-            {
+            "data": {
                 "namespace": "Nails\\GeoIp\\Driver\\",
                 "class": "IpInfo"
             }
